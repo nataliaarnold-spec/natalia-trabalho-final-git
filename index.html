@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farma Hora - Seu Assistente de Saúde</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="app-container">
+
+        <!-- CABEÇALHO GLOBAL -->
+        <header class="app-header">
+            <button class="icon-btn bell-btn" id="btn-alarm-test" title="Ativar e testar alarmes" aria-label="Ativar e testar alarmes">
+                <svg viewBox="0 0 24 24" class="header-icon"><path fill="currentColor" d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+                <span class="bell-badge"></span>
+            </button>
+
+            <div class="logo-container">
+                <span class="logo-text">FARMA HORA</span>
+                <div class="logo-smile">
+                    <svg viewBox="0 0 50 30" class="smile-svg">
+                        <circle cx="12" cy="10" r="4" fill="#0F7A3B"/>
+                        <circle cx="38" cy="10" r="4" fill="#0F7A3B"/>
+                        <path d="M 10 18 Q 25 30 40 18" stroke="#0F7A3B" stroke-width="4" fill="none" stroke-linecap="round"/>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="user-avatar-header" onclick="navigateTo('screen-perfil')">
+                <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230F7A3B'/><circle cx='50' cy='38' r='20' fill='%23FFE0BD'/><path d='M20,88 C20,65 35,55 50,55 C65,55 80,65 80,88 Z' fill='%231B4D3E'/><circle cx='42' cy='35' r='3' fill='%23333'/><circle cx='58' cy='35' r='3' fill='%23333'/><path d='M44 45 Q50 50 56 45' stroke='%23333' stroke-width='2' fill='none'/><path d='M30 25 Q50 15 70 25' stroke='%23DDD' stroke-width='8' fill='none'/></svg>" alt="Sr. Antenor">
+                <span class="online-indicator"></span>
+            </div>
+        </header>
+
+        <!-- RELÓGIO DIGITAL EM TEMPO REAL -->
+        <div class="live-clock-bar">
+            <span class="clock-icon">🕒</span>
+            <span id="current-time-display">00:00:00</span>
+            <span class="clock-date" id="current-date-display">Segunda-feira</span>
+            <span class="alarm-status" id="alarm-status" title="Status dos alarmes">🔔 Alarmes ativos</span>
+        </div>
+
+        <!-- CONTEÚDO DAS TELAS -->
+        <main class="app-content">
+
+            <!-- TELA 1: INÍCIO / HOME -->
+            <section id="screen-inicio" class="screen active">
+               
+                <!-- CARD PRINCIPAL EM DESTAQUE -->
+                <div class="hero-card" id="hero-card-container">
+                    <div class="hero-badge">PRÓXIMO MEDICAMENTO</div>
+                   
+                    <div class="hero-body">
+                        <div class="hero-info">
+                            <h1 id="hero-med-name">DIPIRONA</h1>
+                            <h2 id="hero-med-dose">500mg</h2>
+                            <div class="hero-time-badge">
+                                <span class="time-text" id="hero-med-time">14:00</span>
+                                <div class="countdown-tag">
+                                    <span class="hourglass">⏳</span>
+                                    <span id="hero-countdown">Faltam 0h 0m</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="hero-visual">
+                            <div class="hero-clock-graphic">
+                                <svg viewBox="0 0 100 100" class="analog-clock-svg">
+                                    <circle cx="50" cy="50" r="45" fill="none" stroke="#FFFFFF" stroke-width="6"/>
+                                    <line x1="50" y1="50" x2="50" y2="22" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round"/>
+                                    <line x1="50" y1="50" x2="70" y2="50" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <div class="hero-pill-img" id="hero-med-icon">💊</div>
+                        </div>
+                    </div>
+
+                    <div class="hero-progress-container">
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" id="hero-progress-fill" style="width: 60%;"></div>
+                        </div>
+                        <span class="progress-text" id="hero-progress-text">Tempo restante para a dose</span>
+                    </div>
+
+                    <button class="btn-tomei-main" id="btn-tomei-hero" onclick="markHeroAsTaken()">
+                        <svg viewBox="0 0 24 24" class="btn-icon"><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        <span>TOMEI MEU REMÉDIO</span>
+                    </button>
+                </div>
+
+                <!-- BARRAS DE AÇÃO RÁPIDA -->
+                <div class="quick-actions-grid">
+                    <button class="action-card btn-help" onclick="navigateTo('screen-ajuda')">
+                        <div class="action-icon bg-green-light">
+                            <svg viewBox="0 0 24 24"><path fill="#0F7A3B" d="M12 1a9 9 0 0 0-9 9v7c0 1.66 1.34 3 3 3h3v-8H5v-2c0-3.87 3.13-7 7-7s7 3.13 7 7v2h-4v8h3c1.66 0 3-1.34 3-3v-7a9 9 0 0 0-9-9z"/></svg>
+                        </div>
+                        <div class="action-text">
+                            <h3>Portal de Ajuda</h3>
+                            <p>Fale por áudio com o assistente</p>
+                        </div>
+                    </button>
+
+                    <button class="action-card btn-camera" onclick="navigateTo('screen-camera')">
+                        <div class="action-icon bg-green-light">
+                            <svg viewBox="0 0 24 24"><path fill="#0F7A3B" d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
+                        </div>
+                        <div class="action-text">
+                            <h3>Verificar Medicamento</h3>
+                            <p>Tire uma foto para confirmar</p>
+                        </div>
+                    </button>
+                </div>
+
+                <!-- CAMPO DE BUSCA -->
+                <div class="search-box">
+                    <svg viewBox="0 0 24 24" class="search-icon"><path fill="#888" d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                    <input type="text" id="med-search-input" placeholder="Pesquisar medicamento..." oninput="filterMedicines()">
+                </div>
+
+                <!-- SEÇÃO MEUS MEDICAMENTOS -->
+                <div class="section-header">
+                    <h2>Meus Medicamentos</h2>
+                </div>
+
+                <div class="meds-grid" id="meds-grid-container">
+                    <!-- Cards gerados via JS -->
+                </div>
+
+                <!-- PAINEL DE ESTATÍSTICAS E ADESÃO -->
+                <div class="stats-row">
+                    <div class="stat-card">
+                        <div class="stat-icon-check">✓</div>
+                        <div class="stat-info">
+                            <span class="stat-label">Tomados hoje</span>
+                            <span class="stat-value" id="stat-taken-count">3 / 6</span>
+                            <span class="stat-sub">medicamentos</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="donut-chart-box">
+                            <div class="css-donut" id="adherence-donut">
+                                <span class="donut-text" id="stat-adherence-pct">85%</span>
+                            </div>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-label">Adesão ao tratamento</span>
+                            <span class="stat-sub-bold" id="stat-adherence-text">Muito bom!</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LINHA DE DIAS DA SEMANA -->
+                <div class="calendar-strip" id="calendar-strip">
+                    <!-- Dias gerados automaticamente conforme a data real do computador -->
+                </div>
+
+                <!-- BOTÃO FLUTUANTE ADICIONAR -->
+                <button class="fab-btn" type="button" onclick="openAddMedicineModal()" aria-label="Adicionar medicamento">+</button>
+            </section>
+
+            <!-- TELA 2: LISTA DE MEDICAMENTOS -->
+            <section id="screen-medicamentos" class="screen">
+                <div class="page-title">
+                    <h2>💊 Todos os Remédios</h2>
+                    <p>Veja a lista detalhada e horários</p>
+                </div>
+                <div class="meds-grid" id="full-meds-grid">
+                    <!-- Preenchido via JS -->
+                </div>
+            </section>
+
+            <!-- TELA 3: AGENDA / HORÁRIOS -->
+            <section id="screen-agenda" class="screen">
+                <div class="page-title">
+                    <h2>📅 Agenda de Horários</h2>
+                    <p>Programação diária do Sr. Antenor</p>
+                </div>
+                <div class="timeline-container" id="agenda-timeline">
+                    <!-- Preenchido via JS -->
+                </div>
+            </section>
+
+            <!-- TELA 4: CÂMERA DE CONFIRMAÇÃO -->
+            <section id="screen-camera" class="screen">
+                <div class="camera-screen-card">
+                    <div class="alarm-header-banner">
+                        <div class="bell-ring-icon">🔔</div>
+                        <div class="banner-title">
+                            <h1>HORA DO REMÉDIO!</h1>
+                        </div>
+                    </div>
+
+                    <div class="camera-med-focus" id="camera-active-med">
+                        <div class="focus-info">
+                            <h2 id="cam-med-name">DIPIRONA</h2>
+                            <p id="cam-med-dose">500mg — 1 COMPRIMIDO</p>
+                            <span class="cam-med-time-tag" id="cam-med-time">⏰ 14:00</span>
+                        </div>
+                        <div class="focus-img-pill" id="cam-med-icon">💊</div>
+                    </div>
+
+                    <div class="steps-stepper">
+                        <div class="step-item active">
+                            <div class="step-num">1</div>
+                            <span>TIRE A FOTO</span>
+                        </div>
+                        <div class="step-arrow">➔</div>
+                        <div class="step-item">
+                            <div class="step-num">2</div>
+                            <span>CONFIRMAR</span>
+                        </div>
+                        <div class="step-arrow">➔</div>
+                        <div class="step-item">
+                            <div class="step-num">3</div>
+                            <span>TOME O REMÉDIO</span>
+                        </div>
+                    </div>
+
+                    <!-- VIEWER DA WEBCAM -->
+                    <div class="webcam-viewport">
+                        <video id="webcam-video" autoplay playsinline muted></video>
+                        <canvas id="webcam-canvas" style="display:none;"></canvas>
+                        <input id="camera-file-input" type="file" accept="image/*" capture="environment" onchange="handleCameraFile(event)" style="display:none;">
+                        <div class="camera-overlay-frame"></div>
+                        <div id="camera-placeholder" class="cam-placeholder">
+                            <span class="cam-big-icon">📷</span>
+                            <p>Clique abaixo para abrir a câmera</p>
+                        </div>
+                    </div>
+
+                    <button class="btn-hero-action btn-orange-huge" id="btn-start-camera" onclick="initCamera()">
+                        <span class="btn-cam-icon">📷</span>
+                        <span>ABRIR CÂMERA E TIRAR FOTO</span>
+                    </button>
+
+                    <button class="btn-hero-action btn-green-huge" id="btn-confirm-photo" style="display:none;" onclick="confirmCameraTake()">
+                        <span>✓ CONFIRMAR E TOMAR REMÉDIO</span>
+                    </button>
+
+                    <div class="lock-banner">
+                        <span class="lock-icon">🔒</span>
+                        <span>NÃO É POSSÍVEL SAIR — Confirme o remédio para continuar</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TELA 5: PORTAL DE AJUDA COM VOZ -->
+            <section id="screen-ajuda" class="screen">
+                <div class="portal-ajuda-container">
+                   
+                    <div class="help-top-banner">
+                        <div class="headset-icon">🎧</div>
+                        <div class="banner-text">
+                            <h2>Fale com a gente</h2>
+                            <p>Estamos aqui para ajudar!</p>
+                            <div class="audio-wave-anim">
+                                <span></span><span></span><span></span><span></span><span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="help-actions-row">
+                        <button class="help-btn-card green" onclick="startVoiceRecognition()">
+                            <div class="mic-bubble">🎙️</div>
+                            <h3>FALAR AGORA</h3>
+                            <p>Toque e fale</p>
+                        </button>
+
+                        <button class="help-btn-card orange" onclick="speakText('Mensagem enviada para sua filha Ana com sucesso!')">
+                            <div class="mail-bubble">✉️</div>
+                            <h3>DEIXAR RECADO</h3>
+                            <p>Vamos te responder</p>
+                        </button>
+                    </div>
+
+                    <!-- ATENDENTE VIRTUAL -->
+                    <div class="attendant-card">
+                        <div class="attendant-avatar">
+                            <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230F7A3B'/><circle cx='50' cy='38' r='18' fill='%23FFDBAC'/><path d='M25 85 C25 65 38 55 50 55 C62 55 75 65 75 85 Z' fill='%230F7A3B'/><path d='M30 30 Q50 10 70 30 C70 15 30 15 30 30 Z' fill='%234A2E10'/><circle cx='43' cy='36' r='2' fill='%23000'/><circle cx='57' cy='36' r='2' fill='%23000'/><path d='M45 44 Q50 48 55 44' stroke='%23000' stroke-width='2' fill='none'/><path d='M25 35 Q20 20 32 20 L35 30' stroke='%23333' stroke-width='3' fill='none'/></svg>" alt="Atendente">
+                            <span class="online-dot"></span>
+                        </div>
+                        <h3>Atendente Online</h3>
+                        <p id="voice-status-text">Pronto para te ouvir. Clique no botão abaixo!</p>
+
+                        <button class="btn-voice-huge" id="btn-voice-listen" onclick="startVoiceRecognition()">
+                            <span class="mic-icon-svg">🎙️</span>
+                            <span>TOQUE PARA FALAR</span>
+                        </button>
+                        <p class="sub-voice-hint">🔒 Fale que ouvimos você</p>
+                    </div>
+
+                    <div class="quick-questions-grid">
+                        <button class="q-btn" onclick="processVoiceQuery('que remedio eu tomo agora')">
+                            <span class="q-icon">❓</span>
+                            <div class="q-txt">
+                                <strong>DÚVIDAS</strong>
+                                <small>Qual remédio agora?</small>
+                            </div>
+                            <span class="play-arrow">▶</span>
+                        </button>
+
+                        <button class="q-btn" onclick="processVoiceQuery('que horas sao')">
+                            <span class="q-icon">💊</span>
+                            <div class="q-txt">
+                                <strong>QUE HORAS SÃO?</strong>
+                                <small>Hora atual</small>
+                            </div>
+                            <span class="play-arrow">▶</span>
+                        </button>
+
+                        <button class="q-btn" onclick="processVoiceQuery('qual e meu proximo remedio')">
+                            <span class="q-icon">⚙️</span>
+                            <div class="q-txt">
+                                <strong>PRÓXIMO REMÉDIO</strong>
+                                <small>Ver programação</small>
+                            </div>
+                            <span class="play-arrow">▶</span>
+                        </button>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- TELA 6: PERFIL DO SR. ANTENOR -->
+            <section id="screen-perfil" class="screen">
+                <div class="profile-card-full">
+                    <div class="profile-header-bg">
+                        <div class="profile-avatar-large">
+                            <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230F7A3B'/><circle cx='50' cy='38' r='20' fill='%23FFE0BD'/><path d='M20,88 C20,65 35,55 50,55 C65,55 80,65 80,88 Z' fill='%231B4D3E'/><circle cx='42' cy='35' r='3' fill='%23333'/><circle cx='58' cy='35' r='3' fill='%23333'/><path d='M44 45 Q50 50 56 45' stroke='%23333' stroke-width='2' fill='none'/><path d='M30 25 Q50 15 70 25' stroke='%23DDD' stroke-width='8' fill='none'/></svg>" alt="Sr. Antenor">
+                        </div>
+                        <h2>Sr. Antenor de Oliveira</h2>
+                        <span class="patient-tag">Paciente Cadastrado</span>
+                    </div>
+
+                    <div class="profile-details-list">
+                        <div class="detail-item">
+                            <span class="d-icon">🎂</span>
+                            <div class="d-info">
+                                <label>Idade</label>
+                                <strong>78 anos</strong>
+                            </div>
+                        </div>
+
+                        <div class="detail-item">
+                            <span class="d-icon">⚖️</span>
+                            <div class="d-info">
+                                <label>Peso</label>
+                                <strong>72 kg</strong>
+                            </div>
+                        </div>
+
+                        <div class="detail-item">
+                            <span class="d-icon">📞</span>
+                            <div class="d-info">
+                                <label>Telefone</label>
+                                <strong>(11) 97123-4567</strong>
+                            </div>
+                        </div>
+
+                        <div class="detail-item">
+                            <span class="d-icon">👨‍⚕️</span>
+                            <div class="d-info">
+                                <label>Médico Responsável</label>
+                                <strong>Dr. Carlos Silva (Cardiologista)</strong>
+                            </div>
+                        </div>
+
+                        <div class="detail-item emergency-item">
+                            <span class="d-icon">🚨</span>
+                            <div class="d-info">
+                                <label>Contato de Emergência</label>
+                                <strong>Filha Ana — (11) 98765-4321</strong>
+                            </div>
+                            <button class="call-btn-small" onclick="alert('LIGANDO PARA ANA: (11) 98765-4321')">LIGAR</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- MODAL DE ALARME DE EMERGÊNCIA -->
+        <div class="modal-overlay" id="alarm-modal">
+            <div class="modal-card-alarm">
+                <div class="alarm-bell-animated">🔔</div>
+                <h1 class="alarm-alert-title">ATENÇÃO SR. ANTENOR!</h1>
+                <p class="alarm-subtitle">ESTÁ NA HORA DO SEU REMÉDIO</p>
+
+                <div class="alarm-med-box">
+                    <span class="alarm-med-icon" id="modal-med-icon">💊</span>
+                    <h2 id="modal-med-name">DIPIRONA</h2>
+                    <h3 id="modal-med-dose">500 mg</h3>
+                    <div class="modal-med-time" id="modal-med-time">14:00</div>
+                </div>
+
+                <div class="modal-buttons-stack">
+                    <button class="btn-modal-take" onclick="takeFromModal()">
+                        ✓ TOMEI AGORA
+                    </button>
+                    <button class="btn-modal-cam" onclick="verifyFromModal()">
+                        📷 ESCANEAR / TIRAR FOTO
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL DE ADICIONAR MEDICAMENTO -->
+        <div class="modal-overlay" id="add-medicine-modal" aria-hidden="true">
+            <div class="modal-card-alarm add-medicine-card">
+                <button type="button" class="modal-close" onclick="closeAddMedicineModal()" aria-label="Fechar">×</button>
+                <div class="add-med-icon">💊</div>
+                <h2>Adicionar medicamento</h2>
+                <p>Preencha os dados do remédio para incluir um novo horário.</p>
+                <form id="add-medicine-form" onsubmit="addMedicine(event)">
+                    <label>Nome do medicamento
+                        <input id="new-med-name" type="text" placeholder="Ex.: Dipirona" required>
+                    </label>
+                    <div class="form-two-columns">
+                        <label>Dosagem
+                            <input id="new-med-dose" type="text" placeholder="Ex.: 500 mg" required>
+                        </label>
+                        <label>Horário
+                            <input id="new-med-time" type="time" required>
+                        </label>
+                    </div>
+                    <div class="form-two-columns">
+                        <label>Tipo
+                            <select id="new-med-type">
+                                <option>1 COMPRIMIDO</option>
+                                <option>1 CÁPSULA</option>
+                                <option>1 DOSE</option>
+                                <option>OUTRO</option>
+                            </select>
+                        </label>
+                        <label>Ícone
+                            <select id="new-med-icon">
+                                <option value="💊">💊 Comprimido</option>
+                                <option value="🟢">🟢 Cápsula</option>
+                                <option value="💧">💧 Líquido</option>
+                                <option value="🟠">🟠 Outro</option>
+                            </select>
+                        </label>
+                    </div>
+                    <button class="btn-add-medicine-submit" type="submit">✓ ADICIONAR À AGENDA</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- MENU DE NAVEGAÇÃO INFERIOR FIXO -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" onclick="navigateTo('screen-inicio')" id="nav-inicio">
+                <svg viewBox="0 0 24 24"><path fill="currentColor" d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                <span>Início</span>
+            </button>
+
+            <button class="nav-item" onclick="navigateTo('screen-medicamentos')" id="nav-medicamentos">
+                <svg viewBox="0 0 24 24"><path fill="currentColor" d="M4.5 10.5C3.67 10.5 3 11.17 3 12s.67 1.5 1.5 1.5h15c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5h-15z M10.5 4.5C10.5 3.67 11.17 3 12 3s1.5.67 1.5 1.5v15c0 .83-.67 1.5-1.5 1.5s-1.5-.67-1.5-1.5v-15z"/></svg>
+                <span>Remédios</span>
+            </button>
+
+            <button class="nav-item" onclick="navigateTo('screen-agenda')" id="nav-agenda">
+                <svg viewBox="0 0 24 24"><path fill="currentColor" d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
+                <span>Agenda</span>
+            </button>
+
+            <button class="nav-item" onclick="navigateTo('screen-camera')" id="nav-camera">
+                <svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 15c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3zm9-8h-3.17L16 5H8L6.17 7H3c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2z"/></svg>
+                <span>Escanear</span>
+            </button>
+
+            <button class="nav-item" onclick="navigateTo('screen-ajuda')" id="nav-ajuda">
+                <svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 16h-2v-2h2v2zm1.07-7.75l-.9.92C12.45 11.9 12 12.5 12 14h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.75z"/></svg>
+                <span>Ajuda</span>
+            </button>
+
+            <button class="nav-item" onclick="navigateTo('screen-perfil')" id="nav-perfil">
+                <svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                <span>Perfil</span>
+            </button>
+        </nav>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
